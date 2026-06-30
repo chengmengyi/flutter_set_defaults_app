@@ -1,7 +1,7 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'flutter_set_defaults_app.dart';
 import 'flutter_set_defaults_app_method_channel.dart';
+import 'src/flutter_set_defaults_app_file.dart';
 
 abstract class FlutterSetDefaultsAppPlatform extends PlatformInterface {
   /// Constructs a FlutterSetDefaultsAppPlatform.
@@ -9,7 +9,8 @@ abstract class FlutterSetDefaultsAppPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static FlutterSetDefaultsAppPlatform _instance = MethodChannelFlutterSetDefaultsApp();
+  static FlutterSetDefaultsAppPlatform _instance =
+      MethodChannelFlutterSetDefaultsApp();
 
   /// The default instance of [FlutterSetDefaultsAppPlatform] to use.
   ///
@@ -34,5 +35,13 @@ abstract class FlutterSetDefaultsAppPlatform extends PlatformInterface {
 
   Stream<FlutterSetDefaultsAppFile> get fileStream {
     throw UnimplementedError('fileStream has not been implemented.');
+  }
+
+  Future<bool> openFile({
+    required String path,
+    String? mimeType,
+    String? name,
+  }) {
+    throw UnimplementedError('openFile() has not been implemented.');
   }
 }

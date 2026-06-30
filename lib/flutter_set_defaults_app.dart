@@ -1,36 +1,6 @@
 import 'flutter_set_defaults_app_platform_interface.dart';
-
-class FlutterSetDefaultsAppFile {
-  const FlutterSetDefaultsAppFile({
-    required this.path,
-    this.name,
-    this.mimeType,
-    this.sourceUri,
-  });
-
-  factory FlutterSetDefaultsAppFile.fromMap(Map<Object?, Object?> map) {
-    return FlutterSetDefaultsAppFile(
-      path: map['path'] as String? ?? '',
-      name: map['name'] as String?,
-      mimeType: map['mimeType'] as String?,
-      sourceUri: map['sourceUri'] as String?,
-    );
-  }
-
-  final String path;
-  final String? name;
-  final String? mimeType;
-  final String? sourceUri;
-
-  Map<String, Object?> toMap() {
-    return <String, Object?>{
-      'path': path,
-      'name': name,
-      'mimeType': mimeType,
-      'sourceUri': sourceUri,
-    };
-  }
-}
+import 'src/flutter_set_defaults_app_file.dart';
+export 'src/flutter_set_defaults_app_file.dart';
 
 class FlutterSetDefaultsApp {
   static Future<FlutterSetDefaultsAppFile?> getInitialFile() {
@@ -39,6 +9,18 @@ class FlutterSetDefaultsApp {
 
   static Stream<FlutterSetDefaultsAppFile> get fileStream {
     return FlutterSetDefaultsAppPlatform.instance.fileStream;
+  }
+
+  static Future<bool> openFile({
+    required String path,
+    String? mimeType,
+    String? name,
+  }) {
+    return FlutterSetDefaultsAppPlatform.instance.openFile(
+      path: path,
+      mimeType: mimeType,
+      name: name,
+    );
   }
 
   Future<String?> getPlatformVersion() {
