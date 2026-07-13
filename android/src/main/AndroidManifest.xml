@@ -1,5 +1,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.set.defaults.app.flutter_set_defaults_app">
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:mimeType="application/pdf" />
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:mimeType="application/msword" />
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:mimeType="application/vnd.ms-excel" />
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:mimeType="text/csv" />
+    </intent>
+  </queries>
   <application>
     <provider
       android:name="androidx.core.content.FileProvider"

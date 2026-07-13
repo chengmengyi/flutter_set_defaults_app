@@ -23,6 +23,26 @@ class FlutterSetDefaultsApp {
     );
   }
 
+  static Future<bool> openFileForDefault({
+    required String path,
+    String? mimeType,
+    String? name,
+  }) {
+    return FlutterSetDefaultsAppPlatform.instance.openFileForDefault(
+      path: path,
+      mimeType: mimeType,
+      name: name,
+    );
+  }
+
+  static Future<bool> isCurrentAppDefault({
+    String mimeType = 'application/pdf',
+  }) {
+    return FlutterSetDefaultsAppPlatform.instance.isCurrentAppDefault(
+      mimeType: mimeType,
+    );
+  }
+
   Future<String?> getPlatformVersion() {
     return FlutterSetDefaultsAppPlatform.instance.getPlatformVersion();
   }

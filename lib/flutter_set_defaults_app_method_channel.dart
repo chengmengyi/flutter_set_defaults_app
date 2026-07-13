@@ -54,4 +54,26 @@ class MethodChannelFlutterSetDefaultsApp extends FlutterSetDefaultsAppPlatform {
     });
     return result ?? false;
   }
+
+  @override
+  Future<bool> openFileForDefault({
+    required String path,
+    String? mimeType,
+    String? name,
+  }) async {
+    final bool? result = await methodChannel.invokeMethod<bool>(
+      'openFileForDefault',
+      <String, Object?>{'path': path, 'mimeType': mimeType, 'name': name},
+    );
+    return result ?? false;
+  }
+
+  @override
+  Future<bool> isCurrentAppDefault({required String mimeType}) async {
+    final bool? result = await methodChannel.invokeMethod<bool>(
+      'isCurrentAppDefault',
+      <String, Object?>{'mimeType': mimeType},
+    );
+    return result ?? false;
+  }
 }

@@ -44,4 +44,16 @@ abstract class FlutterSetDefaultsAppPlatform extends PlatformInterface {
   }) {
     throw UnimplementedError('openFile() has not been implemented.');
   }
+
+  Future<bool> openFileForDefault({
+    required String path,
+    String? mimeType,
+    String? name,
+  }) {
+    throw UnimplementedError('openFileForDefault() has not been implemented.');
+  }
+
+  Future<bool> isCurrentAppDefault({required String mimeType}) {
+    throw UnimplementedError('isCurrentAppDefault() has not been implemented.');
+  }
 }

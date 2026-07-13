@@ -6,6 +6,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
+import android.content.pm.PackageManager
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
@@ -66,7 +67,17 @@ class FlutterSetDefaultsAppPlugin :
                 val path = call.argument<String>("path")
                 val mimeType = call.argument<String>("mimeType")
                 val name = call.argument<String>("name")
-                result.success(openFile(path, mimeType, name))
+                result.success(openFile(path, mimeType, name, true))
+            }
+            "openFileForDefault" -> {
+                val path = call.argument<String>("path")
+                val mimeType = call.argument<String>("mimeType")
+                val name = call.argument<String>("name")
+                result.success(openFile(path, mimeType, name, false))
+            }
+            "isCurrentAppDefault" -> {
+                val mimeType = call.argument<String>("mimeType")
+                result.success(isCurrentAppDefault(mimeType))
             }
             else -> result.notImplemented()
         }
@@ -231,7 +242,8 @@ class FlutterSetDefaultsAppPlugin :
     private fun openFile(
         path: String?,
         mimeType: String?,
-        name: String?
+        name: String?,
+        useChooser: Boolean
     ): Boolean {
         val currentActivity = activity ?: return false
         if (path.isNullOrBlank()) {
@@ -255,13 +267,43 @@ class FlutterSetDefaultsAppPlugin :
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-            val chooser = Intent.createChooser(viewIntent, null).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            if (useChooser) {
+                val chooser = Intent.createChooser(viewIntent, null).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                currentActivity.startActivity(chooser)
+            } else {
+                currentActivity.startActivity(viewIntent)
             }
-            currentActivity.startActivity(chooser)
             true
         } catch (_: Exception) {
             false
         }
+    }
+
+    private fun isCurrentAppDefault(mimeType: String?): Boolean {
+        val context = applicationContext ?: activity ?: return false
+        val resolvedMimeType = mimeType?.takeIf { it.isNotBlank() }
+            ?: "application/pdf"
+        val uri = Uri.parse("content://${context.packageName}.flutter_set_defaults_app.default_check/file")
+        val viewIntent = Intent(Intent.ACTION_VIEW).apply {
+            addCategory(Intent.CATEGORY_DEFAULT)
+            setDataAndType(uri, resolvedMimeType)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.packageManager.resolveActivity(
+                viewIntent,
+                PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            context.packageManager.resolveActivity(
+                viewIntent,
+                PackageManager.MATCH_DEFAULT_ONLY
+            )
+        }
+        val packageName = resolveInfo?.activityInfo?.packageName ?: return false
+        return packageName == context.packageName
     }
 }
