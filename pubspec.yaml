@@ -1,7 +1,7 @@
 name: flutter_set_defaults_app
 description: "flutter_set_defaults_app"
 version: 0.0.1
-homepage:
+homepage: https://github.com/chengmengyi/flutter_set_defaults_app
 
 environment:
   sdk: ^3.9.2
